@@ -40,10 +40,17 @@ use VuFind\Exception\ILS as ILSException,
  * @license  http://opensource.org/licenses/GPL-3.0 GNU General Public License
  * @link     http://vufind.org/wiki/building_an_ils_driver Wiki
  */
+<<<<<<< HEAD
 
 class Sierra extends AbstractBase implements TranslatorAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
+=======
+class Sierra extends AbstractBase implements TranslatorAwareInterface
+{
+    use \VuFind\I18n\Translator\TranslatorAwareTrait;
+
+>>>>>>> master
     /**
      * Database connection
      *
@@ -115,6 +122,39 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
             $itemRecords[] = $record[0];
         }
         return $itemRecords;
+    }
+
+    /**
+     * Modify location string to add status information, if necessary
+     *
+     * @param string $location Original location string
+     * @param string $cattime  Date and time item record was created
+     *
+     * @return string
+     */
+    protected function getLocationText($location, $cattime)
+    {
+        // No "just cataloged" setting? Default to unmodified location.
+        if (!isset($this->config['Catalog']['just_cataloged_time'])) {
+            return $location;
+        }
+
+        // Convert hours to seconds:
+        $seconds = 60*60*$this->config['Catalog']['just_cataloged_time'];
+
+        // Was this a recently cataloged item? If so, return a special string
+        // based on the append setting....
+        if (time() - $seconds < strtotime($cattime)) {
+            if (isset($this->config['Catalog']['just_cataloged_append'])
+                && $this->config['Catalog']['just_cataloged_append'] == 'Y'
+            ) {
+                return $location . ' ' . $this->translate('just_cataloged');
+            }
+            return $this->translate('just_cataloged');
+        }
+
+        // Default case: return the location unmodified:
+        return $location;
     }
 
     /**
@@ -363,7 +403,11 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
                     . "varfield_view.field_content, "
                     . "varfield_view.varfield_type_code, "
                     . "checkout.due_gmt, "
+<<<<<<< HEAD
 		    . "item_view.record_creation_date_gmt "
+=======
+                    . "item_view.record_creation_date_gmt "
+>>>>>>> master
                     . "FROM sierra_view.item_view "
                     . "LEFT JOIN sierra_view.varfield_view "
                     . "ON (item_view.id = varfield_view.record_id) "
@@ -397,6 +441,7 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
                 } else {
                     $availability = false;
                 }
+<<<<<<< HEAD
 		$location = $resultArray[1];
 		if ((time()-(60*60*$this->config['Catalog']['just_cataloged_time'])) < strtotime($resultArray[5])) {
 		    if ($this->config['Catalog']['just_cataloged_append'] == "Y") {
@@ -405,6 +450,9 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
 			$location = $this->translate('just_cataloged');
 		    }
 		}		    
+=======
+                $location = $this->getLocationText($resultArray[1], $resultArray[5]);
+>>>>>>> master
                 $itemInfo = [
                     "id" => $id,
                     "status" => $resultArray[0],
@@ -450,9 +498,15 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
                         checkout.due_gmt,
                         varfield_view.field_content,
                         varfield_view.varfield_type_code,
+<<<<<<< HEAD
 			item_view.record_creation_date_gmt
                             FROM
                             sierra_view.item_view
+=======
+                        item_view.record_creation_date_gmt
+                        FROM
+                        sierra_view.item_view
+>>>>>>> master
                         LEFT JOIN sierra_view.location
                         ON (item_view.location_code = location.code)
                         LEFT JOIN sierra_view.location_name
@@ -489,6 +543,7 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
                 } else {
                     $availability = false;
                 }
+<<<<<<< HEAD
 		$location = $resultArray[1];
 		if ((time()-(60*60*$this->config['Catalog']['just_cataloged_time'])) < strtotime($resultArray[5])) {
 		    if ($this->config['Catalog']['just_cataloged_append'] == "Y") {
@@ -497,6 +552,9 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
 			$location = $this->translate('just_cataloged');
 		    }
 		}		    
+=======
+                $location = $this->getLocationText($resultArray[1], $resultArray[5]);
+>>>>>>> master
                 $itemInfo = [
                     "id" => $id,
                     "availability" => $availability,
