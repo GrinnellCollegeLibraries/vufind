@@ -130,12 +130,12 @@ class Sierra extends AbstractBase implements TranslatorAwareInterface
         if (isset($this->config['Catalog']['just_cataloged_time']) && (time()-(60*60*$this->config['Catalog']['just_cataloged_time'])) < strtotime($cattime)) {
             if (isset($this->config['Catalog']['just_cataloged_append']) && $this->config['Catalog']['just_cataloged_append'] == "Y") {
                 $finalLocation = $location . " " . $this->translate('just_cataloged');
-           } else {
+            } else {
                 $finalLocation = $this->translate('just_cataloged');
-           }
-           return $finalLocation;
-       }
-       return $location;
+            }
+            return $finalLocation;
+        }
+        return $location;
     }
 
     /**
