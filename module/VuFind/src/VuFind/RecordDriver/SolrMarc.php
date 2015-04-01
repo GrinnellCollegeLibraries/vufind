@@ -635,18 +635,42 @@ class SolrMarc extends SolrDefault
     {
         // Return empty array if we have no table of contents:
         $fields = $this->marcRecord->getFields('505');
-        if (!$fields) {
+    	if (!$fields) {
+	        $fields970 = $this->marcRecord->getFields('970');
+        }
+        if (!$fields && !$fields970) {
             return [];
         }
 
         // If we got this far, we have a table -- collect it as a string:
         $toc = [];
-        foreach ($fields as $field) {
-            $subfields = $field->getSubfields();
-            foreach ($subfields as $subfield) {
-                // Break the string into appropriate chunks,  and merge them into
-                // return array:
-                $toc = array_merge($toc, explode('--', $subfield->getData()));
+        if ($fields) {
+            foreach ($fields as $field) {
+                $subfields = $field->getSubfields();
+                foreach ($subfields as $subfield) {
+                    // Break the string into appropriate chunks,  and merge them into
+                    // return array:
+                    $toc = array_merge($toc, explode('--', $subfield->getData()));
+                }
+            } 
+        } elseif ($fields970) {
+            foreach ($fields970 as $field) {
+                $chapter = $field->getSubfield('l');
+                $title = $field->getSubfield('t');
+                $author = $field->getSubfield('c');
+                $page = $field->getSubfield('p');
+                $line = " ";
+                if ($chapter) {
+                    $line .= $chapter->getData() . ": ";
+                }
+                $line .= $title->getData();
+                if ($author) {
+                    $line .= ", " . $author->getData();
+                }
+                if ($page) {
+                    $line .= ", p. " . $page->getData();
+                }
+                array_push($toc, $line);
             }
         }
         return $toc;
