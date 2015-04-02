@@ -78,6 +78,13 @@ class EITController extends AbstractSearch
      */
     public function searchAction()
     {
+	$whereAreYou = $_SERVER['REMOTE_ADDR'];
+	if (substr($whereAreYou, 0, 7) != "132.161") {
+	    $account = $this->getAuthManager();
+	    $if ($account->isLoggedIn() == false) {
+		return $this->forceLogin();
+	    }
+        }
         return $this->resultsAction();
     }
 }

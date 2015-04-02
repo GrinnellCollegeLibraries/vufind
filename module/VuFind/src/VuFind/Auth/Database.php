@@ -285,7 +285,9 @@ class Database extends AbstractBase
      */
     public function supportsCreation()
     {
-        return true;
+	//Disabled for security; see TikiWiki for explanation
+        // return true;
+	return false;
     }
 
     /**
@@ -295,7 +297,9 @@ class Database extends AbstractBase
      */
     public function supportsPasswordChange()
     {
-        return true;
+	//Disabled for security; see TikiWiki for explanation
+        //return true;
+	return false;
     }
 
     /**
@@ -305,7 +309,9 @@ class Database extends AbstractBase
      */
     public function supportsPasswordRecovery()
     {
-        return true;
+	//Disabled for security; see TikiWiki for explanation
+        //return true;
+	return false;
     }
 
     /**
