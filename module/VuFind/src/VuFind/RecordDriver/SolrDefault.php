@@ -919,8 +919,10 @@ class SolrDefault extends AbstractBase
      */
     public function getPrimaryAuthor()
     {
-        return isset($this->fields['author']) ?
-            $this->fields['author'] : '';
+	$author = isset($this->fields['author']) ?
+	    $this->fields['author'] : '';
+        return isset($this->fields['author_vernacular']) ?
+            $author . " / " . $this->fields['author_vernacular'] : $author;
     }
 
     /**
@@ -1098,8 +1100,10 @@ class SolrDefault extends AbstractBase
      */
     public function getSubtitle()
     {
-        return isset($this->fields['title_sub']) ?
-            $this->fields['title_sub'] : '';
+        $subtitle = isset($this->fields['title_sub']) ?
+	    $this->fields['title_sub'] : '';
+	return isset($this->fields['title_vernacular']) ?
+            $subtitle . ' / ' . $this->fields['title_vernacular'][0] : $subtitle;
     }
 
     /**
@@ -1199,8 +1203,10 @@ class SolrDefault extends AbstractBase
      */
     public function getTitle()
     {
-        return isset($this->fields['title']) ?
-            $this->fields['title'] : '';
+	$title = isset($this->fields['title']) ?
+	    $this->fields['title'] : '';
+        return isset($this->fields['title_vernacular']) ?
+            $title . ' / ' . $this->fields['title_vernacular'][0] : $title;
     }
 
     /**

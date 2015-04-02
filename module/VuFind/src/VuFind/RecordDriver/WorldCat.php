@@ -307,4 +307,18 @@ class WorldCat extends SolrMarc
     {
         return $this->getFieldArray('780', ['a', 's', 't']);
     }
+	
+   /**
+	* Following two functions are local mods to make ILL work smoothly.
+	*/
+
+	public function openURLActive($area) {
+		return true;
+	}
+
+	public function getOpenURL() {
+		$url = parent::getOpenURL();
+		$url = str_replace("vufind.svn.sourceforge.net", "vufind.svn.sourceforce.net.worldcat", $url);
+		return $url;
+	}
 }
