@@ -1,0 +1,35 @@
+<div class="col-sm-3"><p><strong><?=$this->transEsc('Tools')?></strong></p>
+  <ul>
+    <li><a href="https://grinnell.illiad.oclc.org/illiad/"><?=$this->transEsc('ILL Requests')?></a></li>
+    <li><a href="<?=$this->url('search-history')?>"><?=$this->transEsc('Search History')?></a></li>
+    <li><a href="<?=$this->url('myresearch-home')?>"><?=$this->transEsc('Your Account')?></a></li>
+  </ul>
+</div>
+<div class="col-sm-3"><p><strong><?=$this->transEsc('Advanced Searches')?></strong></p>
+  <ul>
+    <li><a href="<?=$this->url('search-advanced')?>"><?=$this->transEsc('Grinnell\'s Collections')?></a></li>
+    <li><a href="<?=$this->url('worldcat-advanced')?>"><?=$this->transEsc('WorldCat')?></a></li>
+    <li><a href="<?=$this->url('eit-advanced')?>"><?=$this->transEsc('EBSCOhost databases')?></a></li>
+    <li><a href="<?=$this->url('search-reserves')?>"><?=$this->transEsc('Course Reserves')?></a></li>
+    <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+  </ul>
+</div>
+<div class="col-sm-3"><p><strong><?=$this->transEsc('Browse')?></strong></p>
+  <ul>
+<!--    <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>-->
+    <li><a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a></li>
+    <li><a href="https://libweb.grinnell.edu/vufind/Search/Results?type=AllFields&filter[]=genre_facet%3A%22Documentary+films%22"><?=$this->transEsc('Documentary Films')?></a></li>
+    <li><a href="https://libweb.grinnell.edu/vufind/Search/Results?type=AllFields&filter[]=genre_facet%3A%22Feature+films%22"><?=$this->transEsc('Feature Films')?></a></li>
+    <li><a href="https://libweb.grinnell.edu/vufind/Search/Results?type=AllFields&filter[]=genre_facet%3A%22Foreign+films%22"><?=$this->transEsc('Foreign Films')?></a></li>
+</div>
+<div class="col-sm-3"><p><strong><?=$this->transEsc('Help')?></strong></p>
+<ul>
+    <li><a href="http://libweb.grinnell.edu/scripts/bugform.php?system=18&url=<?
+	$url = ((!empty($_SERVER['HTTPS'])) ? "https://" : "http://") . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+print urlencode($url);
+?>">Report a Problem</a></li>
+    <li><a href="<?=$this->url('help-home', array(), array('query' => array('topic' => 'search')))?>" class="searchHelp"><?=$this->transEsc('Search Tips')?></a></li>
+    <li><a href="http://www.grinnell.edu/forms/e-mail-librarian"><?=$this->transEsc('E-mail a Librarian')?></a></li>
+    <li><a href="http://www.grinnell.edu/forms/library-lab"><?=$this->transEsc('Request a Library Lab')?></a></li>
+</ul>
+</div>

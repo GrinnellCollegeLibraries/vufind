@@ -1,0 +1,94 @@
+<? $account = $this->auth()->getManager(); ?>
+<div class="navbar-header col-sm-9 col-md-10">
+  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse">
+    <span class="sr-only">Toggle navigation</span>
+    <i class="fa fa-bars"></i>
+  </button>
+  <!--<div class="row">-->
+<a role="logo" class="navbar-brand" href="http://www.grinnell.edu">Grinnell College</a>
+</div>
+<!--<div class="row grinnell-nav-row">
+<div class="grinnell-nav text-center"><a href="http://www.grinnell.edu/library">Library Home</a></div>
+<div class="grinnell-nav col-sm-1 hidden-xs hidden-sm text-center"><a href="http://www.grinnell.edu/library">Library Home</a></div>
+<div class="grinnell-nav col-sm-1 hidden-xs hidden-sm text-center active"><a href="https://libweb.grinnell.edu/vufind/"><br />3Search</a></div>
+<div class="grinnell-nav col-sm-1 hidden-xs hidden-sm text-center"><a href="http://jy3ke7sv3s.search.serialssolutions.com">Journal Finder</a></div>
+<div class="grinnell-nav col-sm-1 hidden-xs hidden-sm text-center"><a href="http://libweb.grinnell.edu/sp/subjects/databases.php">Databases A-Z</a></div>
+<div class="grinnell-nav col-sm-1 hidden-xs hidden-sm text-center"><a href="http://libweb.grinnell.edu/sp/subjects/">Subject Guides</a></div></div>
+</div>-->
+<? if ($this->layout()->searchbox !== false): ?>
+  <section class="visible-lg">
+    <?=$this->layout()->searchbox ?>
+  </section>
+<? endif; ?>
+<? if (!isset($this->layout()->renderingError)): ?>
+  <div class="collapse navbar-collapse col-sm-3 col-md-2" id="header-collapse">
+    <ul role="navigation" class="nav navbar-nav navbar-right">
+      <li><a href="http://www.grinnell.edu/library">Library Home</a></li>
+      <div class="needs-js">
+        <li>JavaScript disabled or chat unavailable. <a href="http://www.grinnell.edu/about/offices-services/library/find-a-librarian">Find a librarian.</a></li>
+      </div>
+      <div class="libraryh3lp" style="display: none;" jid="query@chat.libraryh3lp.com">
+        <li><a href="#" onclick="window.open('http://libraryh3lp.com/chat/query@chat.libraryh3lp.com?skin=12527&amp;theme=simpletext&amp;title=Ask+a+Librarian&amp;identity=librarian', 'chat', 'resizable=1,width=400,height=268'); return false;"><i class="fa fa-question-circle"></i> Chat with us</a></li>
+      </div>
+      <div class="libraryh3lp" style="display: none;">
+        <li><a href="http://www.grinnell.edu/about/offices-services/library/find-a-librarian"><i class="fa fa-question-circle"></i> Chat (offline)</a></li>
+</div>
+<script type="text/javascript" src="https://libraryh3lp.com/js/libraryh3lp.js?multi,poll"></script>
+      <? if ($this->feedback()->tabEnabled()): ?>
+        <li>
+          <a id="feedbackLink" class="modal-link" href="<?=$this->url('feedback-home') ?>"><i class="fa fa-envelope"></i> <?=$this->transEsc("Feedback")?></a>
+        </li>
+      <? endif; ?>
+      <? $cart = $this->cart(); if ($cart->isActive()): ?>
+        <li id="cartSummary">
+          <a id="cartItems" class="modal-link" title="<?=$this->transEsc('View Book Bag')?>" href="<?=$this->url('cart-home')?>"><i class="fa fa-suitcase"></i> <strong><?=count($cart->getItems())?></strong> <?=$this->transEsc('items')?><?=$cart->isFull() ? ' (' .  $this->transEsc('bookbag_full') . ')' : ''?></a>
+        </li>
+      <? endif; ?>
+      <? if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
+        <li class="logoutOptions<? if(!$account->isLoggedIn()): ?> hidden<? endif ?>">
+          <a href="<?=$this->url('myresearch-home')?>" class="modal-link" title="<?=$this->transEsc("Your Account")?>"><i class="fa fa-home"></i> <?=$this->transEsc("Your Account")?></a>
+        </li>
+        <li class="logoutOptions<? if(!$account->isLoggedIn()): ?> hidden<? endif ?>">
+          <a href="<?=$this->url('myresearch-logout')?>" class="modal-link" title="<?=$this->transEsc("Log Out")?>"><i class="fa fa-sign-out"></i> <?=$this->transEsc("Log Out")?></a>
+        </li>
+        <li id="loginOptions"<? if($account->isLoggedIn()): ?> class="hidden"<? endif ?>>
+          <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
+            <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>"><i class="fa fa-sign-in"></i> <?=$this->transEsc("Institutional Login")?></a>
+          <? else: ?>
+            <a href="<?=$this->url('myresearch-userlogin')?>" class="modal-link" title="<?=$this->transEsc("Login")?>"><i class="fa fa-sign-in"></i> <?=$this->transEsc("Login")?></a>
+          <? endif; ?>
+        </li>
+      <? endif; ?>
+
+      <? if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
+        <li class="dropdown">
+          <form method="post" name="themeForm" action="" id="themeForm">
+            <input type="hidden" name="ui"/>
+          </form>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->transEsc("Theme")?> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <? foreach ($this->layout()->themeOptions as $current): ?>
+              <li<?=$current['selected'] ? ' class="active"' : ''?>><a href="#" onClick="document.themeForm.ui.value='<?=$this->escapeHtmlAttr($current['name'])?>';document.themeForm.submit()"><?=$this->transEsc($current['desc'])?></a></li>
+            <? endforeach; ?>
+          </ul>
+        </li>
+      <? endif; ?>
+
+      <? if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
+        <li class="dropdown">
+          <form method="post" name="langForm" action="" id="langForm">
+            <input type="hidden" name="mylang"/>
+          </form>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->transEsc("Language")?> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <? foreach ($this->layout()->allLangs as $langCode => $langName): ?>
+            <li<?=$this->layout()->userLang == $langCode ? ' class="active"' : ''?>><a href="#" onClick="document.langForm.mylang.value='<?=$langCode?>';document.langForm.submit()"><?=$this->displayLanguageOption($langName)?></a></li>
+          <? endforeach; ?>
+          </ul>
+        </li>
+      <? endif; ?>
+    </ul>
+  </div>
+<? endif; ?>
+
+

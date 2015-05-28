@@ -1,0 +1,139 @@
+<?
+  // Set page title.
+  $this->headTitle($this->translate('Search Home'));
+
+  // Disable top search box -- this page has a special layout.
+  $this->layout()->searchbox = false;
+
+  // Set default value if necessary:
+  if (!isset($this->searchClassId)) {
+    $this->searchClassId = 'Solr';
+  }
+
+  // Load search actions and settings (if any):
+  $options = $this->searchOptions($this->searchClassId);
+  $basicSearch = $options->getSearchAction();
+  $advSearch = $options->getAdvancedSearchAction();
+
+  $this->layout()->breadcrumbs = false;
+?>
+<div class="searchHomeContent">
+  <? if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
+    <div class="alert alert-warning">
+      <h2><?=$this->transEsc('ils_offline_title')?></h2>
+      <p><strong><?=$this->transEsc('ils_offline_status')?></strong></p>
+      <p><?=$this->transEsc('ils_offline_home_message')?></p>
+      <? $supportEmail = $this->escapeHtmlAttr($this->systemEmail()); ?>
+      <p><a href="mailto:<?=$supportEmail?>"><?=$supportEmail?></a></p>
+    </div>
+  <? endif; ?>
+  <div class="well well-lg clearfix">
+   <div class="row">
+    <?=$this->render("search/searchbox.phtml")?>
+   </div>
+   <div class="row" id="advancedlinks"><p><a href="Search/Advanced">Grinnell's Collections&mdash;Advanced Search</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="Worldcat/Advanced">WorldCat&mdash;Advanced Search</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="EBSCO/Advanced">EBSCOhost Databases&mdash;Advanced Search</a></p>
+  	</div>
+  </div>
+</div>
+<div class="col-sm-6"><strong>What does this search?</strong>
+
+<ul>
+	<li><b>Grinnell's Collections</b>, including the library catalog, <a href="http://digital.grinnell.edu">Digital Grinnell</a>, and the College's <a href="http://libweb.grinnell.edu/archives">archives and manuscript collections.</a></li>
+	<li><a href="http://www.worldcat.org/whatis/"><b>WorldCat</b></a></li>
+	<li>Over <a id="ebscolink" href="#">20 article databases</a> from <b>EBSCOhost</b></li>
+<ul>
+
+<div id="ebscolist" style="display:none;">
+<ul>
+<li>Academic Search Premier</li>
+<li>America: History and Life</li>
+<li>American Bibliography of Slavic and East European Studies</li>
+<li>Anthropological Literature</li>
+<li>ATLA Religion Database</li>
+<li>Business Source Elite</li>
+<li>Corporate ResourceNet</li>
+<li>eBook Collection</li>
+<li>EconLit</li>
+<li>Education Research Complete</li>
+<li>ERIC</li>
+<li>European Views of the Americas: 1493 to 1750</li>
+<li>Film &amp; Television Literature Index</li>
+<li>GreenFILE</li>
+<li>Health Source: Nursing/Academic Edition</li>
+<li>Historical Abstracts</li>
+<li>Library, Information Science &amp; Technology Abstracts</li>
+<li>Newspaper Source Plus</li>
+<li>Readers' Guide Retrospective: 1890-1982</li>
+<li>Regional Business News</li>
+<li>RILM Abstracts of Music Literature</li>
+<li>Small Business Reference Center</li>
+<li><i>The Nation</i> Archive</li>
+<li><i>The National Review</i> Archive</li>
+<li><i>The New Republic</i> Archive</li>
+</ul>
+</div>
+
+    <script type="text/javascript">
+    $("#ebscolink").click(function() {
+	    	$("#ebscolist").toggle();
+    });
+	</script>
+</div>
+<div class="col-sm-6"><strong>What does this NOT search?</strong>
+
+<p>Over <a href="http://libweb.grinnell.edu/sp/subjects/databases.php">200 other databases</a> to which Grinnell has access.</p>
+
+<strong>In addition to using this tool, you might also want to:</strong>
+
+<ul>
+	<li>Check the <a href="http://libweb.grinnell.edu/sp/subjects/">subject guides</a> for more databases.</li>
+	<li>Ask a <a href="http://www.grinnell.edu/about/offices-services/library/find-a-librarian">librarian or research tutor</a> for other places to search.</li>
+</ul>
+</div>
+
+<? $facetList = is_object($this->results) ? $this->results->getFacetList() : array(); if (isset($facetList) && is_array($facetList)): ?>
+<div class="row">
+  <? foreach ($facetList as $field => $details): ?>
+    <? $sortedList = $this->sortFacetList($this->results, $field, $details['list'], $basicSearch); ?>
+    <div class="<?=$field=='callnumber-first' ? 'col-sm-6' : 'col-sm-3' ?>">
+      <p class="lead"><?=$this->transEsc('home_browse') . ' ' . $this->transEsc($details['label'])?></p>
+      <div class="row">
+        <ul class="list-unstyled <?=$field == "callnumber-first" ? 'col-sm-6' : 'col-sm-12' ?>">
+        <? /* Special case: two columns for LC call numbers... */ ?>
+        <? if ($field == "callnumber-first"): ?>
+          <? $i = 0; foreach ($sortedList as $url => $value): ?>
+            <? if (!empty($value)): ?>
+              <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+            <? else: $i--; ?>
+            <? endif; ?>
+            <? if (++$i == 10): ?>
+              </ul><ul class="list-unstyled col-sm-6">
+            <? endif; ?>
+          <? endforeach; ?>
+        <? /* Special case: collections */ ?>
+        <? elseif ($field == 'hierarchy_top_title'): ?>
+          <? $i = 0; foreach ($sortedList as $url => $value): ?>
+            <? if (++$i > 10): ?>
+              <li><a href="<?=$this->url('collections-home')?>"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
+              <? break; ?>
+            <? else: ?>
+              <li><a href="<?=$this->url('collections-bytitle')?>?title=<?=urlencode($value)?>"><?=$this->escapeHtml($value)?></a></li>
+            <? endif; ?>
+          <? endforeach; ?>
+        <? else: ?>
+          <? $i = 0; foreach ($sortedList as $url => $value): ?>
+            <? if (++$i > 10): ?>
+              <li><a href="<?=$this->url($advSearch)?>"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
+              <? break; ?>
+            <? elseif (!empty($value)): ?>
+              <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+            <? else: $i--; ?>
+            <? endif; ?>
+          <? endforeach; ?>
+        <? endif; ?>
+        </ul>
+      </div>
+    </div>
+  <? endforeach; ?>
+</div>
+<? endif; ?>
