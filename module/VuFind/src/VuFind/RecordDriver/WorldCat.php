@@ -217,7 +217,11 @@ class WorldCat extends SolrMarc
      */
     public function getTitle()
     {
-        return $this->getFirstFieldValue('245', ['a', 'b']);
+        $title = $this->getFirstFieldValue('245', ['a', 'b']);
+	if (substr($title, -1) == "/") {
+		$title = substr($title, 0, -2);
+	}
+	return $title;
     }
 
     /**
