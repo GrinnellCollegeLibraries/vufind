@@ -1,6 +1,6 @@
 <?php
 /**
- * EBSCO Search Results
+ * Combined Article Search Results
  *
  * PHP version 5
  *
@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category VuFind2
- * @package  Search_EBSCO
+ * @package  Search_Article
  * @author   Julia Bauder <bauderj@grinnell.edu>
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -29,19 +29,17 @@
 namespace VuFind\Search\Article;
 
 /**
- * EBSCO Search Parameters
+ * Combined Article Search Parameters
  * Partially copied from WorldCat Search Parameters; partially copied from other
  * pieces of VuFind code
  *
  * @category VuFind2
- * @package  Search_EBSCO
+ * @package  Search_Article
  * @author   Julia Bauder <bauderj@grinnell.edu>
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://www.vufind.org  Main Page
  */
-//use VuFind\Search\EIT\Results as EITResults;
-//use VuFind\Search\Solr\Results as SolrResults;
 
 class Results extends \VuFind\Search\Base\Results
 
@@ -53,13 +51,6 @@ protected function performSearch()
 	$limit = ($this->getParams()->getLimit())/2;
 //TODO: Make the offset actually work mathematically
 	$offset = ($this->getStartRecord() - 1)/2;	
-//	$eit = new EITResults($this->params);
-//	$eitparams = $eit->getParams()->getBackendParameters();
-//	$solr = new SolrResults($this->params);
-//	$solrparams = $solr->getParams()->getBackendParameters();
-//	print_r($solrparams);
-//	print_r($eitparams);
-//	$collection = $this->getSearchService()->search('Article', $query, $offset, $limit, $eitparams, $solrparams);
 	$collection1 = $this->getSearchService()->search('Solr', $query, $offset, $limit, $solrparams);
 	$collection2 = $this->getSearchService()->search('EIT', $query, $offset, $limit, $eitparams);
 	$this->resultTotal = $collection1->getTotal() + $collection2->getTotal();
@@ -84,7 +75,7 @@ protected function performSearch()
      */
     public function getFacetList($filter = null)
     {
-        // No facets in EIT:
+        // No facets in Combined Article results:
         return [];
     }
 }

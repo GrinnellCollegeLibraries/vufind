@@ -1,6 +1,6 @@
 <?php
 /**
- * EBSCO Search Parameters
+ * Combined Article Search Parameters
  *
  * PHP version 5
  *
@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category VuFind2
- * @package  Search_EIT
+ * @package  Search_Article
  * @author   Julia Bauder <bauderj@grinnell.edu>
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -31,10 +31,10 @@ use VuFindSearch\ParamBag;
 use VuFind\Search\Base\Params as BaseParams;
 
 /**
- * EBSCO Search Parameters
+ * Article Search Parameters
  *
  * @category VuFind2
- * @package  Search_EIT
+ * @package  Search_Article
  * @author   Julia Bauder <bauderj@grinnell.edu>
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
