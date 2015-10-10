@@ -71,6 +71,7 @@ $config = [
         'invokables' => [
             'ajax' => 'VuFind\Controller\AjaxController',
             'alphabrowse' => 'VuFind\Controller\AlphabrowseController',
+	    'article' => 'VuFind\Controller\ArticleController',
             'author' => 'VuFind\Controller\AuthorController',
             'authority' => 'VuFind\Controller\AuthorityController',
             'cart' => 'VuFind\Controller\CartController',
@@ -722,7 +723,7 @@ $dynamicRoutes = [
 
 // Define static routes -- Controller/Action strings
 $staticRoutes = [
-    'Alphabrowse/Home', 'Author/Home', 'Author/Search',
+    'Alphabrowse/Home', 'Article/Home', 'Article/Search', 'Article/Advanced', 'Author/Home', 'Author/Search',
     'Authority/Home', 'Authority/Record', 'Authority/Search',
     'Browse/Author', 'Browse/Dewey', 'Browse/Era', 'Browse/Genre', 'Browse/Home',
     'Browse/LCC', 'Browse/Region', 'Browse/Tag', 'Browse/Topic',
